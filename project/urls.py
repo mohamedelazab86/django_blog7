@@ -15,24 +15,27 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,include
+ 
 from django.conf import settings
 from django.conf.urls.static import static
-#from posts.views import post_list,post_detail,create_post,update_post,delete_post
-from posts.views2 import Post_list,Post_detail,Create_post,Update_post,Delete_post
+from posts.views import post_list,post_detail,create_post,update_post,delete_post
+#from posts.views2 import Post_list,Post_detail,Create_post,Update_post,Delete_post
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('posts/',post_list),
-    # path('create/',create_post),
-    # path('details/<int:id>',post_detail),
-    # path('update/<int:pk>',update_post),
-    # path('delete/<int:id>',delete_post),
-    path('posts/',Post_list.as_view()),
-    path('create/',Create_post.as_view()),
-    path('details/<int:pk>',Post_detail.as_view()),
-    path('update/<int:pk>',Update_post.as_view()),
-    path('delete/<int:pk>',Delete_post.as_view()),
+    path('posts/',post_list),
+    path('create/',create_post),
+     path('details/<int:id>',post_detail),
+     path('update/<int:pk>',update_post),
+    path('delete/<int:id>',delete_post),
+    path('summernote/', include('django_summernote.urls')),
+
+    # path('posts/',Post_list.as_view()),
+    # path('create/',Create_post.as_view()),
+    # path('details/<int:pk>',Post_detail.as_view()),
+    # path('update/<int:pk>',Update_post.as_view()),
+    # path('delete/<int:pk>',Delete_post.as_view()),
     
 ]
 urlpatterns +=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

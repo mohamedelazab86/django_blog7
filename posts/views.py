@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
-from .models import Post
-from .forms import PostForm
+from .models import Post,Comments
+from .forms import PostForm,CommentForm
 
 # Create your views here.
 #================================== crud opertions by fuction based views =============
@@ -17,8 +17,29 @@ def post_list(request):
     return render(request,'posts/post_list.html',context)
 
 def post_detail(request,id):
-    post=Post.objects.get(id=id)
-    context={'post':post}
+    my_post=Post.objects.get(id=id)
+    comments=Comments.objects.filter(post=my_post)
+
+    if request.method=='POST':
+        form=CommentForm(request.POST)
+        if form.is_valid():
+            my_form=form.save(commit=False)
+            my_form.post=my_post
+            my_form.author=request.user
+            
+            my_form.save()
+
+
+            return redirect('/posts/')
+
+    else:
+        form=CommentForm()
+
+    context={
+        'post':my_post,
+        'comments':comments,
+        'form':form
+        }
     return render(request,'posts/post_detail.html',context)
 
 def create_post(request):
